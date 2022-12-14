@@ -38,21 +38,22 @@ app.post('/api/notes', (req, res) => {
   
     // Prepare a response object to send back to the client
     let response;
-  
+  const note = {...req.body, id: Date.now()}
     // Check if there is anything in the response body
     if (req.body && req.body.title) {
       response = {
         status: 'success',
-        data: req.body,
+        data: note,
       };
       res.status(201).json(response);
     } else {
       res.status(400).json('Request body must at least contain a title');
     }
+
   readFileAsync('./Develop/db/db.json').then(data => {
     // spread operator
     let allNotes = JSON.parse(data)
-    return [...allNotes, req.body]
+    return [...allNotes, note]
   }).then(data => {
     writeFileAsync("./Develop/db/db.json", JSON.stringify(data)).then(data => {
         res.json(data)
@@ -64,11 +65,16 @@ app.post('/api/notes', (req, res) => {
   });
   
 
-app.delete('/:id', (req,res) =>{
+app.delete('/api/notes/:id', (req,res) =>{
     const noteId = req.params.id;
     readFileAsync('./Develop/db/db.json')
     .then((data) => JSON.parse(data))
     .then((json) => {
+        const index= json.findIndex(note => note.id==req.params.id)
+        json.splice(index,1)
+        writeFileAsync("./Develop/db/db.json", JSON.stringify(json)).then(data => {
+            res.json(json)
+        });
         //write file
         //res.json(`Note ${} has been deleted);
     })
