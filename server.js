@@ -69,7 +69,8 @@ app.delete('/:id', (req,res) =>{
     readFileAsync('./Develop/db/db.json')
     .then((data) => JSON.parse(data))
     .then((json) => {
-        
+        //write file
+        //res.json(`Note ${} has been deleted);
     })
 })
 
