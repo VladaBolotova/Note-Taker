@@ -64,7 +64,14 @@ app.post('/api/notes', (req, res) => {
   });
   
 
-  
+app.delete('/:id', (req,res) =>{
+    const noteId = req.params.id;
+    readFileAsync('./Develop/db/db.json')
+    .then((data) => JSON.parse(data))
+    .then((json) => {
+        
+    })
+})
 
 app.listen(PORT,()=>
 console.info(`App listening at http:..localhost:${PORT}`)
